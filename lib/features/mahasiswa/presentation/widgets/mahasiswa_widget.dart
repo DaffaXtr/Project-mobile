@@ -48,8 +48,6 @@ class _MahasiswaCardState extends State<MahasiswaCard>
           Theme.of(context).primaryColor.withOpacity(0.7),
         ];
 
-    final bool isAktif = widget.mahasiswa.status == 'Aktif';
-
     return GestureDetector(
       onTapDown: (_) => _controller.forward(),
       onTapUp: (_) {
@@ -82,92 +80,89 @@ class _MahasiswaCardState extends State<MahasiswaCard>
           ),
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Avatar
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: gradientColors,
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: gradientColors[0].withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
+                // Header Row
+                Row(
+                  children: [
+                    // Avatar
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: gradientColors,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      widget.mahasiswa.nama.substring(0, 1).toUpperCase(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                // Info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              widget.mahasiswa.nama,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: -0.3,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                      child: Center(
+                        child: Text(
+                          widget.mahasiswa.name.isEmpty
+                              ? '?'
+                              : widget.mahasiswa.name.substring(0, 1).toUpperCase(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: isAktif
-                                  ? Colors.green.withOpacity(0.1)
-                                  : Colors.orange.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: isAktif
-                                    ? Colors.green.withOpacity(0.4)
-                                    : Colors.orange.withOpacity(0.4),
-                              ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    // Name and Email
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.mahasiswa.name,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: -0.3,
                             ),
-                            child: Text(
-                              widget.mahasiswa.status,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: isAktif ? Colors.green[700] : Colors.orange[700],
-                              ),
-                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          _buildInfoRow(
+                            Icons.email_outlined,
+                            widget.mahasiswa.email,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      _buildInfoRow(Icons.badge_outlined,
-                          'NIM: ${widget.mahasiswa.nim}'),
-                      const SizedBox(height: 4),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                // Comment Body
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: gradientColors[0].withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       _buildInfoRow(
-                          Icons.email_outlined, widget.mahasiswa.email),
-                      const SizedBox(height: 4),
-                      _buildInfoRow(Icons.school_outlined,
-                          '${widget.mahasiswa.jurusan} • ${widget.mahasiswa.angkatan}'),
+                        Icons.tag,
+                        'Post #${widget.mahasiswa.postId}',
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.mahasiswa.body,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[700],
+                          height: 1.4,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
                 ),
@@ -182,12 +177,12 @@ class _MahasiswaCardState extends State<MahasiswaCard>
   Widget _buildInfoRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 14, color: Colors.grey[600]),
-        const SizedBox(width: 6),
+        Icon(icon, size: 12, color: Colors.grey[600]),
+        const SizedBox(width: 4),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+            style: TextStyle(fontSize: 11, color: Colors.grey[600]),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),

@@ -1,12 +1,13 @@
 import 'dart:async';
-
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:state_notifier/state_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_project/features/mahasiswa_aktif/data/models/mahasiswa_aktif_model.dart';
 import 'package:mobile_project/features/mahasiswa_aktif/data/repositories/mahasiswa_aktif_repository.dart';
 
 final mahasiswaAktifRepositoryProvider =
     Provider<MahasiswaAktifRepository>((ref) {
-  return MahasiswaAktifRepository();
+  return MahasiswaAktifRepository(null);
 });
 
 class MahasiswaAktifNotifier

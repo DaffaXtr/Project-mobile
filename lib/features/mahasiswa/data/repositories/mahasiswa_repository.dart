@@ -1,61 +1,28 @@
+import 'package:dio/dio.dart';
+import 'package:mobile_project/core/network/dio_client.dart';
 import '../models/mahasiswa_model.dart';
 
 class MahasiswaRepository {
-  /// Mendapatkan daftar mahasiswa
-  Future<List<MahasiswaModel>> getMahasiswaList() async {
-    // Simulasi network delay
-    await Future.delayed(const Duration(seconds: 1));
+  final DioClient _dioClient;
 
-    // Data dummy mahasiswa
-    return [
-      MahasiswaModel(
-        nama: 'Budi Santoso',
-        nim: '2021001',
-        email: 'budi.santoso@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2021',
-        status: 'Aktif',
-      ),
-      MahasiswaModel(
-        nama: 'Siti Rahayu',
-        nim: '2021002',
-        email: 'siti.rahayu@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2021',
-        status: 'Aktif',
-      ),
-      MahasiswaModel(
-        nama: 'Ahmad Fauzi',
-        nim: '2020001',
-        email: 'ahmad.fauzi@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2020',
-        status: 'Aktif',
-      ),
-      MahasiswaModel(
-        nama: 'Dewi Putri',
-        nim: '2020002',
-        email: 'dewi.putri@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2020',
-        status: 'Lulus',
-      ),
-      MahasiswaModel(
-        nama: 'Rizky Pratama',
-        nim: '2022001',
-        email: 'rizky.pratama@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2022',
-        status: 'Aktif',
-      ),
-      MahasiswaModel(
-        nama: 'Nur Halimah',
-        nim: '2022002',
-        email: 'nur.halimah@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2022',
-        status: 'Aktif',
-      ),
-    ];
+  MahasiswaRepository(DioClient? dioClient)
+      : _dioClient = dioClient ?? DioClient();
+
+  /// Mendapatkan daftar mahasiswa dari API (Comments)
+  Future<List<MahasiswaModel>> getMahasiswaList() async {
+    try {
+      final Response response = await _dioClient.dio.get('/comments');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        print(data); // Debug: Lihat data yang sudah di-fetch
+        return data.map((json) => MahasiswaModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Gagal memuat data mahasiswa: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      print('Error: $e');
+      throw Exception('Gagal memuat data mahasiswa: ${e.message}');
+    }
   }
 }

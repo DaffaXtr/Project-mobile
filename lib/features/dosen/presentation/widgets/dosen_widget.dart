@@ -49,8 +49,8 @@ class _ModernDosenCardState extends State<ModernDosenCard>
   }
 
   String getInitial() {
-    if (widget.dosen.nama.isEmpty) return "?";
-    return widget.dosen.nama.substring(0, 1).toUpperCase();
+    if (widget.dosen.name.isEmpty) return "?";
+    return widget.dosen.name.substring(0, 1).toUpperCase();
   }
 
   @override
@@ -136,7 +136,7 @@ class _ModernDosenCardState extends State<ModernDosenCard>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.dosen.nama,
+                        widget.dosen.name,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -148,8 +148,8 @@ class _ModernDosenCardState extends State<ModernDosenCard>
                       const SizedBox(height: 8),
 
                       _buildInfoRow(
-                        Icons.badge_outlined,
-                        "NIP: ${widget.dosen.nip}",
+                        Icons.person_outlined,
+                        "@${widget.dosen.username}",
                       ),
 
                       const SizedBox(height: 4),
@@ -162,8 +162,8 @@ class _ModernDosenCardState extends State<ModernDosenCard>
                       const SizedBox(height: 4),
 
                       _buildInfoRow(
-                        Icons.school_outlined,
-                        widget.dosen.jurusan,
+                        Icons.location_on_outlined,
+                        '${widget.dosen.address.street}, ${widget.dosen.address.city}',
                       ),
                     ],
                   ),

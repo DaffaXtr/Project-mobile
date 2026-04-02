@@ -1,55 +1,27 @@
+import 'package:dio/dio.dart';
+import 'package:mobile_project/core/network/dio_client.dart';
 import 'package:mobile_project/features/mahasiswa_aktif/data/models/mahasiswa_aktif_model.dart';
 
 class MahasiswaAktifRepository {
-  Future<List<MahasiswaAktifModel>> getMahasiswaAktifList() async {
-    await Future.delayed(const Duration(seconds: 1));
+  final DioClient _dioClient;
 
-    return [
-      MahasiswaAktifModel(
-        nama: 'Budi Santoso',
-        nim: '2021001',
-        email: 'budi.santoso@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2021',
-        semester: '6',
-        ipk: 3.75,
-      ),
-      MahasiswaAktifModel(
-        nama: 'Siti Rahayu',
-        nim: '2021002',
-        email: 'siti.rahayu@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2021',
-        semester: '6',
-        ipk: 3.90,
-      ),
-      MahasiswaAktifModel(
-        nama: 'Rizky Pratama',
-        nim: '2022001',
-        email: 'rizky.pratama@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2022',
-        semester: '4',
-        ipk: 3.60,
-      ),
-      MahasiswaAktifModel(
-        nama: 'Nur Halimah',
-        nim: '2022002',
-        email: 'nur.halimah@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2022',
-        semester: '4',
-        ipk: 3.82,
-      ),
-      MahasiswaAktifModel(
-        nama: 'Fajar Hidayat',
-        nim: '2023001',
-        email: 'fajar.hidayat@student.example.com',
-        jurusan: 'Teknik Informatika',
-        angkatan: '2023',
-        semester: '2',
-        ipk: 3.50,
-      ),
-    ];
+  MahasiswaAktifRepository(DioClient? dioClient)
+      : _dioClient = dioClient ?? DioClient();
+
+  Future<List<MahasiswaAktifModel>> getMahasiswaAktifList() async {
+    try {
+      final Response response = await _dioClient.dio.get('/posts');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        print(data); // Debug: Lihat data yang sudah di-fetch
+        return data.map((json) => MahasiswaAktifModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Gagal memuat data mahasiswa aktif: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      print('Error: $e');
+      throw Exception('Gagal memuat data mahasiswa aktif: ${e.message}');
+    }
   }
 }

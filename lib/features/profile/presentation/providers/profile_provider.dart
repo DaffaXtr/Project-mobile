@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:state_notifier/state_notifier.dart';
 import 'package:mobile_project/features/profile/data/models/profile_model.dart';
 import 'package:mobile_project/features/profile/data/repositories/profile_repository.dart';
 
